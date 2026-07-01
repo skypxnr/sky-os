@@ -69,3 +69,6 @@ Run the bootable file using this command:
 ```
 qemu-system-x86_64 boot.bin
 ```
+If everything works, you will see this: <br>
+![VM booting from boot.bin](image.png)
+Seeing this screen is normal because you just wrote only functioning of bootloader. Let's add some flavour later!
