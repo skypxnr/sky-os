@@ -70,5 +70,80 @@ Run the bootable file using this command:
 qemu-system-x86_64 boot.bin
 ```
 If everything works, you will see this: <br>
-![VM booting from boot.bin](image.png)
+![VM booting from boot.bin](image.png) <br>
 Seeing this screen is normal because you just wrote only functioning of bootloader. Let's add some flavour later!
+
+# BIOS (Basic Input/Output System)
+Now we will actually make the computer do something. As you have booted last time, the computer switches to "Real Mode". It's a 16-bit mode assisted by "BIOS". BIOS provides us the tools to simply interact with the system (like printing characters, printing input from the keyboard and so on).  Let's learn how to print a character to the screen. 
+
+## Character
+1. Switch to teletype mode.
+
+- Teletype Mode (TTY Mode): A text-rendering protocol where characters are output sequentially, one after another, at the current cursor position, automatically advancing the cursor and handling screen-wrapping or control characters (like newlines).
+
+To do so, you need to use the `ax` register. See the code block for the `boot.asm` below.
+```
+mov ah, 0x0e           ; Set BIOS scrolling teletype function (write character to screen)
+mov al, 'H'            ; Load the ASCII character 'H' into the AL register to be printed
+int 0x10               ; Call the BIOS video services interrupt to execute the print
+jmp $                  ; Jump to the current address ($), creating an infinite loop to halt execution
+times 510-($-$$) db 0  ; Pad the rest of the 512-byte sector with zeros up to byte 510
+db 0x55, 0xaa          ; Add the standard boot signature at bytes 511 and 512 so the BIOS recognizes it
+```
+
+This is going to print the letter H on the screen, now let's do the same for every letter in "Hello World!".
+
+
+```
+mov ah, 0x0e           ; Set BIOS scrolling teletype function (write character to screen)
+mov al, 'H'            ; Load the ASCII character 'H' into the AL register to be printed
+int 0x10               ; Call the BIOS video services interrupt to execute the print
+
+mov ah, 0x0e
+mov al, 'e'
+int 0x10
+
+mov ah, 0x0e
+mov al, 'l'
+int 0x10
+
+mov ah, 0x0e
+mov al, 'l'
+int 0x10
+
+mov ah, 0x0e
+mov al, 'o'
+int 0x10
+
+mov ah, 0x0e
+mov al, ' '
+int 0x10
+
+mov ah, 0x0e
+mov al, 'W'
+int 0x10
+
+mov ah, 0x0e
+mov al, 'o'
+int 0x10
+
+mov ah, 0x0e
+mov al, 'r'
+int 0x10
+
+mov ah, 0x0e
+mov al, 'l'
+int 0x10
+
+mov ah, 0x0e
+mov al, 'd'
+int 0x10
+
+jmp $                  ; Jump to the current address ($), creating an infinite loop to halt execution
+times 510-($-$$) db 0  ; Pad the rest of the 512-byte sector with zeros up to byte 510
+db 0x55, 0xaa          ; Add the standard boot signature at bytes 511 and 512 so the BIOS recognizes it
+```
+You will then see something like this:
+
+![VM shows "Hello World"](image-1.png)
+
