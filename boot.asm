@@ -1,13 +1,23 @@
-[org 0x7c00]
+[org 0x7c00]                  
 
 start:
-    mov ah, 0x0e
-    mov al, [variableName]
-    int 0x10
+    mov ah, 0x0e               
+    mov bx, variableName     
+
+printString:
+    mov al, [bx]             
+    cmp al, 0                  
+    je end                      
+    int 0x10                   
+    inc bx                      
+    jmp printString              
+
+end:
+    jmp $                         
 
 variableName:
-    db "This is a string.", 0
+    db "This is a string.", 0    
 
-jmp $
-times 510-($-$$) db 0  
-db 0x55, 0xaa
+times 510-($-$$) db 0          
+
+db 0x55, 0xaa 
