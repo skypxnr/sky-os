@@ -9,5 +9,14 @@ The procedure of what I have done is written in the Github Wiki[[Click Here!](ht
 - Has a file system (TODO)
 - Can do basic stuff like "ls", "cd", etc. (TODO)
 
+# Next Steps
+1. Transitioning from Real Mode to Protected Mode
+2. Interrupt Handling & IDT
+3. Memory Management
+4. Kernel Core
+5. File System
+6. Bootloader Enhancement
+7. Shell/CLI
+
 ### From skypxnr
 This is just for my project, not a major release so the world would ditch Windows and use Sky-OS xD!
