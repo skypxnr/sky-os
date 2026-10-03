@@ -7,7 +7,6 @@ SECTIONS
 
     .text : 
     {
-        kernelEntry.o(.text)
         *(.text)
     }
 

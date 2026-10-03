@@ -1,4 +1,3 @@
-
 [org 0x7C00]
 [bits 16]
 
@@ -12,7 +11,6 @@ start:
     mov ss, ax
     mov sp, 0x7C00
     
-
     mov ax, 0x1000               ; Load kernel to 0x1000:0x0000
     mov es, ax
     
@@ -27,10 +25,8 @@ start:
     
     jc disk_error                ; If carry flag set, disk error
     
-
     call enable_a20
     
-
     lgdt [gdt_descriptor]
     
     ; Switch to protected mode
@@ -67,29 +63,22 @@ disk_error_msg: db "Disk error!", 0
 CODE_SEG equ 0x08
 DATA_SEG equ 0x10
 
-; GDT (Global Descriptor Table)
 gdt_start:
-    ; Null descriptor (required)
     dq 0x0
-    
-    ; Code descriptor (Offset 0x08)
 gdt_code:
-    dw 0xFFFF           ; Limit (bits 0-15)
-    dw 0x0000           ; Base (bits 0-15)
-    db 0x00             ; Base (bits 16-23)
-    db 10011010b        ; Access byte (Present, Ring 0, Code, Readable)
-    db 11001111b        ; Granularity (4KB blocks, 32-bit)
-    db 0x00             ; Base (bits 24-31)
-    
-    ; Data descriptor (Offset 0x10)
+    dw 0xFFFF
+    dw 0x0000
+    db 0x00
+    db 10011010b
+    db 11001111b
+    db 0x00
 gdt_data:
-    dw 0xFFFF           ; Limit (bits 0-15)
-    dw 0x0000           ; Base (bits 0-15)
-    db 0x00             ; Base (bits 16-23)
-    db 10010010b        ; Access byte (Present, Ring 0, Data, Writable)
-    db 11001111b        ; Granularity (4KB blocks, 32-bit)
-    db 0x00             ; Base (bits 24-31)
-    
+    dw 0xFFFF
+    dw 0x0000
+    db 0x00
+    db 10010010b
+    db 11001111b
+    db 0x00
 gdt_end:
 
 gdt_descriptor:
@@ -98,7 +87,6 @@ gdt_descriptor:
 
 [bits 32]
 init_pm:
-    ; Set up segment registers for protected mode
     mov ax, DATA_SEG
     mov ds, ax
     mov es, ax
@@ -108,10 +96,7 @@ init_pm:
     
     mov esp, 0x90000            ; Set stack pointer to 576KB
     
-    ; Jump to kernel
     jmp CODE_SEG:0x10000
 
-; Pad bootloader to 510 bytes
 times 510 - ($ - $$) db 0
-; Boot sector signature
 dw 0xAA55
